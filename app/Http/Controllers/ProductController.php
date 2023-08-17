@@ -17,6 +17,39 @@ class ProductController extends Controller
         return view('product/index', compact('products'));
     }
 
+    public function insert(Request $request){
+        $product = new Product();
+        $product->code = $request->code;
+        $product->name = $request->name;
+        $product->category_id = $request->category_id;
+        $product->price = $request->price;
+        $product->stock_qty = $request->stock_qty;
+
+        $product->save();
+
+        //$product->save(); < ถ้าไม่ชัวร์ อย่าเพิ่งพิมพ์ save
+        if($request->hasFile('image')) //ไว้เขียนทีหลัง ความสําคัญน้อยกว่า วิธีเอาค่าจากฟอร์ม มาบันทึก
+        {
+            $f = $request->file('image');
+            $upload_to = 'upload/images'; //แปลว่า คุณต้องไปสร้างโฟลเดอร์ชื่อนี้ไว้ในโปรเจคคุณด้วยนะ
+
+            // get path
+            $relative_path = $upload_to.'/'.$f->getClientOriginalName();
+            $absolute_path = public_path().'/'.$upload_to;
+            // upload file
+            $f->move($absolute_path, $f->getClientOriginalName());
+
+            // save image path to database
+            $product->image_url = $relative_path;
+            $product->save(); //< บันทึกลงฐานข้อมูล อย่าเพิ่งพิมพ์จนกว่าจะไม่มี error นะครับ
+        }
+
+        return redirect('product')->with('ok',true)
+        ->with('msg', ' บันทึกข้อมูลเรียบร้อยเเล้ว ');
+
+    }
+
+
     public function search(Request $request){
         $query = $request->q;
         if($query) {
@@ -30,11 +63,17 @@ class ProductController extends Controller
     }
 
     public function edit($id = null){
-        $categories = Category::pluck('name', 'id')->prepend('เลือกรายการ', '');
-        $product = Product::find($id);
-        return view('product/edit')
-        ->with('product', $product)
-        ->with('categories',$categories);
+       $categories = Category::pluck('name', 'id')->prepend('เลือกรายการ', '');
+        if($id) {
+        // edit view
+            $product = Product::where('id', $id)->first(); return view('product/edit')
+            ->with('product', $product)
+            ->with('categories', $categories);
+        } else {
+        // add view
+            return view('product/add')
+            ->with('categories', $categories);
+}
     
     }
 
@@ -77,8 +116,27 @@ class ProductController extends Controller
         $product->stock_qty = $request->stock_qty;
 
         $product->save();
-        
+        if($request->hasFile('image')){
+            $f = $request->file('image');
+            $upload_to = 'upload/images'; //แปลว่า คุณต้องไปสร้างโฟลเดอร์ชื่อนี้ไว้ในโปรเจคคุณด้วยนะ
+
+            // get path
+            $relative_path = $upload_to.'/'.$f->getClientOriginalName();
+            $absolute_path = public_path().'/'.$upload_to;
+            // upload file
+            $f->move($absolute_path, $f->getClientOriginalName());
+
+            // save image path to database
+            $product->image_url = $relative_path;
+            $product->save(); //< บันทึกลงฐานข้อมูล อย่าเพิ่งพิมพ์จนกว่าจะไม่มี error นะครับ
+}
         return redirect('product')->with('ok',true)
         ->with('msg', ' บันทึกข้อมูลเรียบร้อยเเล้ว ');
+    }
+    public function remove($id) {
+        Product::find($id)->delete();
+        return redirect('product')
+        ->with('ok', true)
+        ->with('msg', 'ลบข้อมูลสําเร็จ');
     }
 }

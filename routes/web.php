@@ -24,7 +24,9 @@ Route::get('/product/search', [App\Http\Controllers\ProductController::class, 's
 Route::post('/product/search', [App\Http\Controllers\ProductController::class, 'search']);
 Route::get('/product/edit/{id?}',[App\Http\Controllers\ProductController::class, 'edit']);
 Route::post('/product/update',[App\Http\Controllers\ProductController::class, 'update']);
-
+Route::get('/product/edit',[App\Http\Controllers\ProductController::class, 'insert']);
+Route::post('/product/edit',[App\Http\Controllers\ProductController::class, 'insert']);
+Route::get('/product/remove/{id}',[App\Http\Controllers\ProductController::class, 'remove']);
 
 Route::get('/category', [App\Http\Controllers\CategoryController::class, 'index']);
 Route::post('/category/search', [App\Http\Controllers\CategoryController::class, 'search']);

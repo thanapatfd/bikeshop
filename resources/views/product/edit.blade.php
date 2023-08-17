@@ -25,8 +25,6 @@
 </div>
 <div class="panel-body">
 
-
-
 <table>
     <tr>
         <td>{{ Form::label('code','รหัสสินค้า') }}</td>

@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {   
-    var $rp = 2;
+    var $rp = 3;
 
     public function index(){
         $categories = Category::paginate($this->rp);
