@@ -15,6 +15,7 @@
                 {{ csrf_field() }}
                 <input type="text" name="q" class="form-control" placeholder="พิมพ์รหัสหรือชื่อเพื่อค้นหา">
                 <button type="submit" class="btn btn-primary">ค้นหา</button>
+                <a href="{{ URL::to('category/edit') }}" class="btn btn-success pull-right"> เพิ่มประเภทสินค้า </a>
             </form>
         </div>
 
@@ -35,7 +36,8 @@
 
                     <td class="bs-center">
                         <a href="{{ URL::to('category/edit/'.$p->id) }}" class="btn btn-info"><i class="fa fa-edit"> แก้ไข</i></a>
-                        <a href="#" class="btn btn-danger"><i class="fa fa-trash"> ลบ</i></a>
+                        <a href="{{ URL::to('category/remove/'.$p->id) }}"onclick="return confirm('คุณต้องการลบประเภทสินค้าหรือไม่?')" class="btn btn-danger btn-delete"><i class="fa fa-trash"> ลบ</i></a>
+
                     </td>
                 </tr>
             @endforeach

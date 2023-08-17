@@ -18,7 +18,7 @@
     <div class="container">
         <nav class="navbar navbar-default navbar-static-top">
             <div class="navbar-header">
-                <a href="#" class="navbar-brand">Bikeshop</a>
+                <a href="{{ URL::to('product') }}" class="navbar-brand">Bikeshop</a>
             </div>
             <div id="navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">

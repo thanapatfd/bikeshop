@@ -52,7 +52,7 @@
                         
                         <a href="{{ URL::to('product/edit/'.$p->id) }}" class="btn btn-info"><i class="fa fa-edit"> แก้ไข</i></a>
                         {{-- <a href="#" class="btn btn-danger btn-delete"  id-delete="{{ $p->id }}"><i class="fa fa-trash"> ลบ</i></a> --}}
-                        <a href="{{ URL::to('product/remove/'.$p->id) }}"onclick="return confirm('Are you want to delete')" class="btn btn-danger btn-delete"><i class="fa fa-trash"> ลบ</i></a>
+                        <a href="{{ URL::to('product/remove/'.$p->id) }}"onclick="return confirm('คุณต้องการลบข้อมูลสินค้าหรือไม่?')" class="btn btn-danger btn-delete"><i class="fa fa-trash"> ลบ</i></a>
 
                     </td>
                 </tr>

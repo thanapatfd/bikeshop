@@ -17,7 +17,37 @@ class ProductController extends Controller
         return view('product/index', compact('products'));
     }
 
+    
     public function insert(Request $request){
+
+        $rules = array(
+            'code' => 'required', 
+            'name' => 'required',
+            'category_id' => 'required|numeric',
+            'price' => 'numeric',
+            'stock_qty' => 'numeric'
+        );
+        $messages = array(
+            'required' => 'กรุณากรอกข้อมูล :attribute ให้ครบถ้วน', 
+            'numeric' => 'กรุณากรอกข้อมูล:attribute ให้เป็นตัวเลข'
+        );
+
+        $id = $request->id;
+        $temp = array(
+            'code' => $request->code,
+            'name' => $request->name,
+            'category_id' => $request->category_id, 
+            'price' => $request->price,  
+            'stock_qty' => $request->stock_qty  
+        );
+        
+        $validator = Validator::make($temp, $rules, $messages);
+        if ($validator->fails()) {
+            return redirect('product/edit/'.$id)
+            ->withErrors($validator)
+            ->withInput();
+        }
+
         $product = new Product();
         $product->code = $request->code;
         $product->name = $request->name;

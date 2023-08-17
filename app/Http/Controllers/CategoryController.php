@@ -17,6 +17,36 @@ class CategoryController extends Controller
         return view('category/index', compact('categories'));
     }
 
+
+    public function insert(Request $request){
+        $rules = array(
+            'name' => 'required',
+        );
+        $messages = array(
+            'required' => 'กรุณากรอกข้อมูล :attribute ให้ครบถ้วน', 
+        );
+
+        $id = $request->id;
+        $temp = array(
+            'name' => $request->name,
+        );
+        
+        $validator = Validator::make($temp, $rules, $messages);
+        if ($validator->fails()) {
+            return redirect('category/edit/'.$id)
+            ->withErrors($validator)
+            ->withInput();
+        }
+
+        $category = new Category();
+        $category->name = $request->name;
+
+        $category ->save();
+        
+        return redirect('category')->with('ok',true)
+        ->with('msg', ' บันทึกข้อมูลเรียบร้อยเเล้ว ');
+    }
+
     public function search(Request $request){
         $query = $request->q;
         if($query) {
@@ -30,8 +60,13 @@ class CategoryController extends Controller
 
     public function edit($id = null){
         $category = Category::find($id);
-        return view('category/edit')->with('category', $category);
-    
+        if($id){
+            $category = Category::where('id', $id)->first(); return view('category/edit')
+            ->with('category', $category);
+        }else {
+        
+            return view('category/add')->with('category', $category);
+        }
     }
 
     public function update(Request $request) {
@@ -62,5 +97,12 @@ class CategoryController extends Controller
         
         return redirect('category')->with('ok',true)
         ->with('msg', ' บันทึกข้อมูลเรียบร้อยเเล้ว ');
+    }
+
+    public function remove($id) {
+        Category::find($id)->delete();
+        return redirect('category')
+        ->with('ok', true)
+        ->with('msg', 'ลบข้อมูลสําเร็จ');
     }
 }
